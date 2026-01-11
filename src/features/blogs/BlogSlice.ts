@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { Blog } from "./types";
+import { getBlogs } from "./blogThunks";
 
 interface BlogsState {
   blogs: Blog[];
@@ -23,6 +24,11 @@ const blogsSlice = createSlice({
   name: "blogs",
   initialState,
   reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getBlogs.fulfilled, (state, action) => {
+      state.blogs = action.payload;
+    });
+  },
 });
 
 export default blogsSlice.reducer;

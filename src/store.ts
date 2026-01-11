@@ -9,3 +9,6 @@ export const store = configureStore({
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
+
+// supabase password
+// rCwW6LxEph3AOUmq

@@ -1,5 +1,8 @@
+import { useEffect } from "react";
 import BlogsList from "../features/blogs/BlogList";
 import Title from "../ui/Title";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { getBlogs } from "../features/blogs/blogThunks";
 
 const blogsData = [
   {
@@ -116,6 +119,13 @@ const blogsData = [
 // },
 
 export default function DashboardPage() {
+  const dispatch = useAppDispatch();
+  const { blogs } = useAppSelector((state) => state.blogs);
+
+  useEffect(() => {
+    dispatch(getBlogs());
+  }, [dispatch]);
+
   return (
     <div className="p-10">
       <p className="mb-5 font-semibold text-slate-700">
@@ -124,7 +134,7 @@ export default function DashboardPage() {
 
       <Title>Recent Blog Posts</Title>
 
-      <BlogsList blogsData={blogsData} />
+      <BlogsList blogsData={blogs} />
     </div>
   );
 }
