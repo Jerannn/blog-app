@@ -1,3 +1,4 @@
+import Button from "../ui/Button";
 import Title from "../ui/Title";
 
 export default function CreateBlogPage() {
@@ -34,12 +35,9 @@ export default function CreateBlogPage() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="bg-amber-600 hover:bg-amber-700 text-white font-medium px-6 py-2.5 rounded-md transition cursor-pointer"
-        >
+        <Button type="button" className="bg-amber-600 hover:bg-amber-700">
           Create Blog
-        </button>
+        </Button>
       </form>
     </div>
   );

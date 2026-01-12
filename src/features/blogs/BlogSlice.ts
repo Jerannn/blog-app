@@ -4,20 +4,14 @@ import { getBlogs } from "./blogThunks";
 
 interface BlogsState {
   blogs: Blog[];
+  isLoading: boolean;
+  error: string;
 }
 
 const initialState: BlogsState = {
-  blogs: [
-    {
-      id: "string",
-      title: "string",
-      content: "string",
-      author_name: "string",
-      author_email: "string",
-      user_id: "string",
-      created_at: "string",
-    },
-  ],
+  blogs: [],
+  isLoading: false,
+  error: "",
 };
 
 const blogsSlice = createSlice({
@@ -25,9 +19,19 @@ const blogsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getBlogs.fulfilled, (state, action) => {
-      state.blogs = action.payload;
-    });
+    // Fetching Blogs Data
+    builder
+      .addCase(getBlogs.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getBlogs.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.blogs = action.payload;
+      })
+      .addCase(getBlogs.rejected, (state) => {
+        state.isLoading = false;
+        state.error = "Failed to fetch blogs";
+      });
   },
 });
 

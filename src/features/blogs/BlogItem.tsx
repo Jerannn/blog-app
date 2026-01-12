@@ -35,8 +35,12 @@ export default function BlogsItem({ data }: BlogsItemProps) {
           </div>
 
           <div className="space-x-3">
-            <Button className="bg-blue-500 hover:bg-blue-600">Edit</Button>
-            <Button className="bg-red-500 hover:bg-red-600">Delete</Button>
+            <Button type="button" className="bg-blue-500 hover:bg-blue-600">
+              Edit
+            </Button>
+            <Button type="button" className="bg-red-500 hover:bg-red-600">
+              Delete
+            </Button>
           </div>
         </div>
       </article>
