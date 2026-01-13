@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import Loading from "./Loading";
-import { getCurrentUser } from "../services/apiAuth";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
 
 type ProtectedRouteProps = {
   children: React.ReactNode;
@@ -10,24 +9,16 @@ type ProtectedRouteProps = {
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { user, isLoading, authChecked } = useAppSelector(
-    (state) => state.auth
-  );
+  const { authChecked, isAuthenticated, isLoading } = useUser();
 
-  //   if (!user) dispatch(getCurrentUser());
-  // get user data
+  // If there is NO user authenticated, redirect to the /login
   useEffect(() => {
-    if (!authChecked) dispatch(getCurrentUser());
-  }, [dispatch, authChecked]);
-
-  // If there is NO user or authenticated, redirect to the /login
-  useEffect(() => {
-    if (authChecked && !user) navigate("/login");
-  }, [user, authChecked, navigate]);
+    if (authChecked && !isAuthenticated) navigate("/login", { replace: true });
+  }, [authChecked, isAuthenticated, navigate]);
 
   // display loading screen
-  if (!authChecked || isLoading) return <Loading />;
+  if (isLoading) return <Loading />;
 
-  return children;
+  // Display the dashboard
+  if (isAuthenticated) return children;
 }

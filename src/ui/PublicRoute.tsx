@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { useEffect } from "react";
-import { getCurrentUser } from "../services/apiAuth";
 import Loading from "./Loading";
+import { useUser } from "../hooks/useUser";
 
 type PublicRouteProps = {
   children: React.ReactNode;
@@ -10,23 +9,16 @@ type PublicRouteProps = {
 
 export default function PublicRoute({ children }: PublicRouteProps) {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { user, authChecked, isLoading } = useAppSelector(
-    (state) => state.auth
-  );
+  const { authChecked, isAuthenticated, isLoading } = useUser();
 
-  // Check if has user authenticated
+  // Check if there's a user authenticated => if YES, redirect to the dashboard
   useEffect(() => {
-    if (!authChecked) dispatch(getCurrentUser());
-  }, [dispatch, authChecked]);
+    if (authChecked && isAuthenticated)
+      navigate("/dashboard", { replace: true });
+  }, [authChecked, isAuthenticated, navigate]);
 
-  // If user exists => redirect to dashboard
-  useEffect(() => {
-    if (authChecked && user) navigate("/dashboard");
-  }, [authChecked, user, navigate]);
-
-  // Display loading screen while checking the auth
-  if (!authChecked || isLoading) return <Loading />;
+  // display loading screen
+  if (isLoading) return <Loading />;
 
   // Only unauthenticated user can see login/register
   return children;

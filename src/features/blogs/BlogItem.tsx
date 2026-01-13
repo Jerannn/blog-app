@@ -1,14 +1,5 @@
 import Button from "../../ui/Button";
-
-type Blog = {
-  id: string;
-  title: string;
-  content: string;
-  author_email: string;
-  author_name: string;
-  user_id: string;
-  created_at: string;
-};
+import type { Blog } from "./types";
 
 type BlogsItemProps = {
   data: Blog;
@@ -25,12 +16,12 @@ export default function BlogsItem({ data }: BlogsItemProps) {
           <div className="flex flex-col">
             <p className=" text-slate-700 text-sm">
               <span className="font-semibold">Posted from: </span>
-              {data.author_name}
+              {data.authorName}
             </p>
 
             <p className=" text-slate-700 text-sm">
               <span className="font-semibold">Created on: </span>
-              {data.created_at}
+              {data.createdAt}
             </p>
           </div>
 

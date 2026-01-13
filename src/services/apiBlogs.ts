@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import supabase from "../../services/supabase";
-import type { Blog } from "./types";
+import supabase from "./supabase";
+import type { Blog, CreateBlogInput } from "../features/blogs/types";
 
 export const getBlogs = createAsyncThunk<Blog[]>("blogs/getBlogs", async () => {
   const { data, error } = await supabase.from("blogs").select("*");
@@ -12,3 +12,10 @@ export const getBlogs = createAsyncThunk<Blog[]>("blogs/getBlogs", async () => {
 
   return data;
 });
+
+export const createBlog = createAsyncThunk(
+  "blogs/createBlog",
+  async (data: CreateBlogInput) => {
+    console.log(data);
+  }
+);

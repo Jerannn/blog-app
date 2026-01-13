@@ -5,15 +5,15 @@ import { getCurrentUser, login, registerUser } from "../../services/apiAuth";
 interface AuthState {
   user: AuthType | null;
   isLoading: boolean;
-  authChecked: boolean;
   error: string | null;
+  authChecked: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
   isLoading: false,
-  authChecked: false,
   error: null,
+  authChecked: false,
 };
 
 const authSlice = createSlice({
@@ -53,14 +53,13 @@ const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
+        state.user = action.payload;
         state.isLoading = false;
         state.authChecked = true;
-        state.user = action.payload;
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
         state.isLoading = false;
         state.user = null;
-        state.authChecked = false;
         state.error = action.payload as string;
       });
   },

@@ -3,7 +3,7 @@ import { MdEmail } from "react-icons/md";
 import { IoIosLock } from "react-icons/io";
 import Button from "../ui/Button";
 import { Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { useAppDispatch } from "../hooks/hooks";
 import { useState } from "react";
 import { registerUser } from "../services/apiAuth";
 
@@ -12,7 +12,6 @@ export default function RegistrationPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const handleRegistration = (e: React.FormEvent<HTMLFormElement>) => {

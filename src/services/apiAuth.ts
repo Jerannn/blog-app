@@ -33,7 +33,7 @@ export const registerUser = createAsyncThunk(
       id: data.user.id,
       email: data.user.email || "",
       fullName: data.user.user_metadata?.full_name || "",
-      isAuthenticated: data.user.role || "",
+      role: data.user.role || "",
     };
 
     console.log("Registered user:", user);
@@ -56,7 +56,7 @@ export const login = createAsyncThunk(
       id: data.user.id,
       fullName: data.user.user_metadata.full_name || "",
       email: data.user.email || "",
-      isAuthenticated: data.user.role || "",
+      role: data.user.role || "",
     };
 
     return user;
@@ -72,18 +72,14 @@ export const getCurrentUser = createAsyncThunk(
 
     const { data, error } = await supabase.auth.getUser();
 
-    console.log(data);
-
     if (error) throw new Error(error.message);
 
     const user = {
       id: data.user.id,
       fullName: data.user.user_metadata.full_name || "",
       email: data.user.email || "",
-      isAuthenticated: data.user.role || "",
+      role: data.user.role || "",
     };
-
-    console.log(user);
 
     return user;
   }
