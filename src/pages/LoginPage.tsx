@@ -1,29 +1,26 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "../ui/Button";
 import { IoIosLock } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { login } from "../services/apiAuth";
+import { useState } from "react";
+import useLogin from "../hooks/useLogin";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("jeranpogi@gmail.com");
   const [password, setPassword] = useState("jeranpogi123");
 
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { login, isLoggingIn } = useLogin();
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!email || !password) return;
 
-    dispatch(login({ email, password }));
+    const success = await login({ email, password });
+
+    if (success) {
+      setEmail("");
+      setPassword("");
+    }
   };
-
-  useEffect(() => {
-    if (user) navigate("/dashboard");
-  }, [navigate, user]);
 
   return (
     <div className="max-w-xl  p-10 m-auto bg-white ">
@@ -63,7 +60,12 @@ export default function LoginPage() {
           />
         </div>
 
-        <Button className="bg-amber-600 hover:bg-amber-700">Login</Button>
+        <Button
+          className="bg-amber-600 hover:bg-amber-700"
+          isDisabled={isLoggingIn}
+        >
+          {isLoggingIn ? "Logging in..." : "Login"}
+        </Button>
       </form>
 
       <div className="mt-6 p-2 pt-7 flex justify-center gap-1 border-t border-slate-300">

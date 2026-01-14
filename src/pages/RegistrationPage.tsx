@@ -3,28 +3,25 @@ import { MdEmail } from "react-icons/md";
 import { IoIosLock } from "react-icons/io";
 import Button from "../ui/Button";
 import { Link } from "react-router-dom";
-import { useAppDispatch } from "../hooks/hooks";
 import { useState } from "react";
-import { registerUser } from "../services/apiAuth";
+import { useRegistration } from "../hooks/useRegistration";
 
 export default function RegistrationPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const dispatch = useAppDispatch();
+  const { register, isRegistering } = useRegistration();
 
-  const handleRegistration = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegistration = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(fullName, email, password);
-    if (fullName && email && password) {
-      dispatch(
-        registerUser({
-          fullName,
-          email,
-          password,
-        })
-      );
+
+    const success = await register({ fullName, email, password });
+
+    if (success) {
+      setFullName("");
+      setEmail("");
+      setPassword("");
     }
   };
 
@@ -81,8 +78,12 @@ export default function RegistrationPage() {
           />
         </div>
 
-        <Button type="submit" className="bg-amber-600 hover:bg-amber-700">
-          Sign Up
+        <Button
+          type="submit"
+          className="bg-amber-600 hover:bg-amber-700"
+          isDisabled={isRegistering}
+        >
+          {isRegistering ? "Signing up..." : "Sign Up"}
         </Button>
       </form>
 

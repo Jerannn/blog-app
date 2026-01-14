@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Loading from "./Loading";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
+import CenterContent from "./CenterContent";
 
 type ProtectedRouteProps = {
   children: React.ReactNode;
@@ -9,7 +10,7 @@ type ProtectedRouteProps = {
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const navigate = useNavigate();
-  const { authChecked, isAuthenticated, isLoading } = useUser();
+  const { authChecked, isAuthenticated, isFetchingUser } = useUser();
 
   // If there is NO user authenticated, redirect to the /login
   useEffect(() => {
@@ -17,7 +18,12 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   }, [authChecked, isAuthenticated, navigate]);
 
   // display loading screen
-  if (isLoading) return <Loading />;
+  if (isFetchingUser)
+    return (
+      <CenterContent>
+        <Loading />
+      </CenterContent>
+    );
 
   // Display the dashboard
   if (isAuthenticated) return children;

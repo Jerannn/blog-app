@@ -4,7 +4,7 @@ export interface Blog {
   content: string;
   authorName: string;
   authorEmail: string;
-  userId: string;
+  user_id: string;
   createdAt: string;
 }
 
@@ -13,5 +13,5 @@ export interface CreateBlogInput {
   content: string;
   authorName: string;
   authorEmail: string;
-  userId: string;
+  user_id: string;
 }

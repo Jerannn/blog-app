@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "./hooks";
+import { useAppDispatch, useAppSelector } from "./reduxHooks";
 import { getCurrentUser } from "../services/apiAuth";
 
 export function useUser() {
   const dispatch = useAppDispatch();
-  const { user, authChecked, isLoading } = useAppSelector(
+  const { user, authChecked, isFetchingUser } = useAppSelector(
     (state) => state.auth
   );
 
@@ -15,7 +15,7 @@ export function useUser() {
 
   return {
     authChecked,
-    isLoading,
+    isFetchingUser,
     isAuthenticated: user?.role === "authenticated",
   };
 }

@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import BlogsList from "../features/blogs/BlogList";
 import Title from "../ui/Title";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import Loading from "../ui/Loading";
 import { getBlogs } from "../services/apiBlogs";
+import User from "../ui/User";
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
-  const { isLoading } = useAppSelector((state) => state.blogs);
-  const { user } = useAppSelector((state) => state.auth);
+  const { isFetching } = useAppSelector((state) => state.blogs);
 
   useEffect(() => {
     dispatch(getBlogs());
@@ -16,12 +16,16 @@ export default function DashboardPage() {
 
   return (
     <div className="p-10">
-      <p className="mb-5 font-semibold text-slate-700">
-        Welcome, {user?.fullName}
-      </p>
+      <User />
 
       <Title>Recent Blog Posts</Title>
-      {isLoading ? <Loading /> : <BlogsList />}
+      {isFetching ? (
+        <div className="mt-10">
+          <Loading />
+        </div>
+      ) : (
+        <BlogsList />
+      )}
     </div>
   );
 }

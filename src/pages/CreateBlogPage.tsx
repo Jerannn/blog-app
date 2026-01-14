@@ -1,31 +1,23 @@
 import { useState } from "react";
 import Button from "../ui/Button";
 import Title from "../ui/Title";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { createBlog } from "../services/apiBlogs";
-import type { CreateBlogInput } from "../features/blogs/types";
+import { useCreateBlog } from "../hooks/useCreateBlog";
 
 export default function CreateBlogPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
-  console.log(user);
-  const handleCreateBlog = (e: React.FormEvent<HTMLFormElement>) => {
+  const { create, isCreating } = useCreateBlog();
+
+  const handleCreateBlog = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!title || !content) return;
+    const success = await create({ title, content });
 
-    const newBlogData: CreateBlogInput = {
-      title,
-      content,
-      authorName: user?.fullName || "",
-      authorEmail: user?.email || "",
-      userId: user?.id || "",
-    };
-
-    dispatch(createBlog(newBlogData));
+    if (success) {
+      setTitle("");
+      setContent("");
+    }
   };
 
   return (
@@ -68,8 +60,12 @@ export default function CreateBlogPage() {
           />
         </div>
 
-        <Button type="submit" className="bg-amber-600 hover:bg-amber-700">
-          Create Blog
+        <Button
+          type="submit"
+          className="bg-amber-600 hover:bg-amber-700"
+          isDisabled={isCreating}
+        >
+          {isCreating ? "Creating..." : "Create Blog"}
         </Button>
       </form>
     </div>

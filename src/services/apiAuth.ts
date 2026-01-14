@@ -36,7 +36,6 @@ export const registerUser = createAsyncThunk(
       role: data.user.role || "",
     };
 
-    console.log("Registered user:", user);
     return user;
   }
 );
@@ -49,8 +48,7 @@ export const login = createAsyncThunk(
       password,
     });
 
-    if (error) throw new Error(error.message);
-    console.log(data);
+    if (error) throw new Error("Login failed");
 
     const user = {
       id: data.user.id,
@@ -63,24 +61,27 @@ export const login = createAsyncThunk(
   }
 );
 
-export const getCurrentUser = createAsyncThunk(
-  "auth/getCurrentUser",
-  async () => {
-    const { data: session } = await supabase.auth.getSession();
+export const getCurrentUser = createAsyncThunk("auth/user", async () => {
+  const { data: session } = await supabase.auth.getSession();
 
-    if (!session.session) return null;
+  if (!session.session) return null;
 
-    const { data, error } = await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.getUser();
 
-    if (error) throw new Error(error.message);
+  if (error) throw new Error(error.message);
 
-    const user = {
-      id: data.user.id,
-      fullName: data.user.user_metadata.full_name || "",
-      email: data.user.email || "",
-      role: data.user.role || "",
-    };
+  const user = {
+    id: data.user.id,
+    fullName: data.user.user_metadata.full_name || "",
+    email: data.user.email || "",
+    role: data.user.role || "",
+  };
 
-    return user;
-  }
-);
+  return user;
+});
+
+export const logout = createAsyncThunk("auth/logout", async () => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) throw new Error("Can't logout, something went wrong.");
+});

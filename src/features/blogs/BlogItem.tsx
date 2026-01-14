@@ -1,11 +1,29 @@
+import { memo } from "react";
 import Button from "../../ui/Button";
 import type { Blog } from "./types";
+import { formatDate } from "../../utils/helper";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { deleteBlog } from "../../services/apiBlogs";
 
 type BlogsItemProps = {
   data: Blog;
 };
 
-export default function BlogsItem({ data }: BlogsItemProps) {
+function BlogsItem({ data }: BlogsItemProps) {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
+  const { isDeleting } = useAppSelector((state) => state.blogs);
+
+  const handleDelete = (id: string) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this blog?"
+    );
+
+    if (!confirmed) return;
+
+    dispatch(deleteBlog(id));
+  };
+
   return (
     <>
       <article className="bg-white p-5 space-y-3 my-5 rounded-sm">
@@ -21,20 +39,29 @@ export default function BlogsItem({ data }: BlogsItemProps) {
 
             <p className=" text-slate-700 text-sm">
               <span className="font-semibold">Created on: </span>
-              {data.createdAt}
+              {formatDate(data.createdAt)}
             </p>
           </div>
 
-          <div className="space-x-3">
-            <Button type="button" className="bg-blue-500 hover:bg-blue-600">
-              Edit
-            </Button>
-            <Button type="button" className="bg-red-500 hover:bg-red-600">
-              Delete
-            </Button>
-          </div>
+          {user?.id === data.user_id ? (
+            <div className="space-x-3">
+              <Button type="button" className="bg-blue-500 hover:bg-blue-600">
+                Edit
+              </Button>
+              <Button
+                type="button"
+                className="bg-red-500 hover:bg-red-600"
+                isDisabled={isDeleting}
+                onClick={() => handleDelete(data.id)}
+              >
+                Delete
+              </Button>
+            </div>
+          ) : null}
         </div>
       </article>
     </>
   );
 }
+
+export default memo(BlogsItem);

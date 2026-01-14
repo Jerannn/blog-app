@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Loading from "./Loading";
 import { useUser } from "../hooks/useUser";
+import CenterContent from "./CenterContent";
 
 type PublicRouteProps = {
   children: React.ReactNode;
@@ -9,7 +10,7 @@ type PublicRouteProps = {
 
 export default function PublicRoute({ children }: PublicRouteProps) {
   const navigate = useNavigate();
-  const { authChecked, isAuthenticated, isLoading } = useUser();
+  const { authChecked, isAuthenticated, isFetchingUser } = useUser();
 
   // Check if there's a user authenticated => if YES, redirect to the dashboard
   useEffect(() => {
@@ -18,7 +19,12 @@ export default function PublicRoute({ children }: PublicRouteProps) {
   }, [authChecked, isAuthenticated, navigate]);
 
   // display loading screen
-  if (isLoading) return <Loading />;
+  if (isFetchingUser)
+    return (
+      <CenterContent>
+        <Loading />
+      </CenterContent>
+    );
 
   // Only unauthenticated user can see login/register
   return children;
