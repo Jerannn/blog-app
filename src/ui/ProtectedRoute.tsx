@@ -14,8 +14,9 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   // If there is NO user authenticated, redirect to the /login
   useEffect(() => {
-    if (authChecked && !isAuthenticated) navigate("/login", { replace: true });
-  }, [authChecked, isAuthenticated, navigate]);
+    if (authChecked && !isAuthenticated && !isFetchingUser)
+      navigate("/login", { replace: true });
+  }, [authChecked, isAuthenticated, isFetchingUser, navigate]);
 
   // display loading screen
   if (isFetchingUser)

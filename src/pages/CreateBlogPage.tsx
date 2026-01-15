@@ -2,6 +2,8 @@ import { useState } from "react";
 import Button from "../ui/Button";
 import Title from "../ui/Title";
 import { useCreateBlog } from "../hooks/useCreateBlog";
+import TextInput from "../ui/TextInput";
+import TextArea from "../ui/TextArea";
 
 export default function CreateBlogPage() {
   const [title, setTitle] = useState("");
@@ -28,37 +30,21 @@ export default function CreateBlogPage() {
         onSubmit={handleCreateBlog}
         className="mt-4 bg-white rounded-sm p-5 space-y-5"
       >
-        <div className="flex flex-col">
-          <label htmlFor="title" className="text-slate-700 text-sm font-medium">
-            Title
-          </label>
-          <input
-            type="text"
-            name="title"
-            id="title"
-            placeholder="Enter your blog title"
-            className=" border border-slate-300 p-1 rounded-sm text-sm text-slate-800  placeholder:text-slate-400 outline-0 focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
+        <TextInput
+          label="Title"
+          id="title"
+          placeholder="Enter your blog title"
+          value={title}
+          onChange={setTitle}
+        />
 
-        <div className="flex flex-col">
-          <label
-            htmlFor="content"
-            className="text-slate-700 text-sm font-medium"
-          >
-            Content
-          </label>
-          <textarea
-            name="content"
-            id="content"
-            placeholder="Enter your blog content here..."
-            className=" border border-slate-300 p-1 rounded-sm text-sm text-slate-800  placeholder:text-slate-400 outline-0 focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-        </div>
+        <TextArea
+          label="Content"
+          id="content"
+          placeholder="Enter your blog content here"
+          value={content}
+          onChange={setContent}
+        />
 
         <Button
           type="submit"

@@ -61,6 +61,7 @@ export default function LoginPage() {
         </div>
 
         <Button
+          type="submit"
           className="bg-amber-600 hover:bg-amber-700"
           isDisabled={isLoggingIn}
         >

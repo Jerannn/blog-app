@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
 import toast from "react-hot-toast";
 import { login as loginApi } from "../services/apiAuth";
-import { useEffect } from "react";
 
 type LoginProps = {
   email: string;
@@ -10,9 +8,8 @@ type LoginProps = {
 };
 
 function useLogin() {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { user, isLoggingIn } = useAppSelector((state) => state.auth);
+  const isLoggingIn = useAppSelector((state) => state.auth.isLoggingIn);
 
   const login = async ({ email, password }: LoginProps) => {
     if (!email || !password) {
@@ -21,17 +18,14 @@ function useLogin() {
     }
 
     try {
-      await dispatch(loginApi({ email, password }));
+      await dispatch(loginApi({ email, password })).unwrap();
+
       return true;
     } catch (error) {
       console.error(error);
       return false;
     }
   };
-
-  useEffect(() => {
-    if (user) navigate("/dashboard", { replace: true });
-  }, [navigate, user]);
 
   return { login, isLoggingIn };
 }

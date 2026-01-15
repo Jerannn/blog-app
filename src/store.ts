@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import blogsReducer from "./features/blogs/BlogSlice";
 import authReducer from "./features/auth/authSlice";
+import uiReducer from "./features/ui/UiSlice";
 
 export const store = configureStore({
   reducer: {
     blogs: blogsReducer,
     auth: authReducer,
+    ui: uiReducer,
   },
 });
 

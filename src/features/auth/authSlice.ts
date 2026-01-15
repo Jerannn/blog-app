@@ -10,24 +10,24 @@ import toast from "react-hot-toast";
 
 interface AuthState {
   user: AuthType | null;
+  authChecked: boolean;
   isLoading: boolean;
   isLoggingIn: boolean;
   isRegistering: boolean;
   isFetchingUser: boolean;
   isLoggingOut: boolean;
   error: string | null;
-  authChecked: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
+  authChecked: false,
   isLoading: false,
   isLoggingIn: false,
   isRegistering: false,
   isFetchingUser: false,
   isLoggingOut: false,
   error: null,
-  authChecked: false,
 };
 
 const authSlice = createSlice({
@@ -43,10 +43,12 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isRegistering = false;
         state.user = action.payload;
+        state.authChecked = true;
         toast.success("Registered successfully");
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isRegistering = false;
+        state.authChecked = true;
         toast.error(action.payload as string);
       })
 
@@ -57,11 +59,12 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoggingIn = false;
         state.user = action.payload;
+        state.authChecked = true;
         toast.success(`Welcome, ${state.user.fullName}`);
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoggingIn = false;
-        console.log(action);
+        state.authChecked = true;
         toast.error(action.error.message as string);
       })
 
@@ -74,10 +77,10 @@ const authSlice = createSlice({
         state.isFetchingUser = false;
         state.authChecked = true;
       })
-      .addCase(getCurrentUser.rejected, (state, action) => {
+      .addCase(getCurrentUser.rejected, (state) => {
         state.isFetchingUser = false;
         state.user = null;
-        state.error = action.payload as string;
+        state.authChecked = true;
       })
 
       // logout

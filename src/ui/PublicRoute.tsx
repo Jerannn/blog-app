@@ -14,9 +14,9 @@ export default function PublicRoute({ children }: PublicRouteProps) {
 
   // Check if there's a user authenticated => if YES, redirect to the dashboard
   useEffect(() => {
-    if (authChecked && isAuthenticated)
+    if (authChecked && isAuthenticated && !isFetchingUser)
       navigate("/dashboard", { replace: true });
-  }, [authChecked, isAuthenticated, navigate]);
+  }, [authChecked, isAuthenticated, isFetchingUser, navigate]);
 
   // display loading screen
   if (isFetchingUser)
@@ -27,5 +27,5 @@ export default function PublicRoute({ children }: PublicRouteProps) {
     );
 
   // Only unauthenticated user can see login/register
-  return children;
+  if (!isAuthenticated) return children;
 }

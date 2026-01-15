@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
+import ModalLayout from "./ModalLayout";
 
 export default function AppLayout() {
   return (
@@ -8,6 +9,8 @@ export default function AppLayout() {
       <main className=" bg-slate-100 grow">
         <Outlet />
       </main>
+
+      <ModalLayout />
     </div>
   );
 }

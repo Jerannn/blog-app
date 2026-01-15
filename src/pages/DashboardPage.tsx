@@ -8,11 +8,11 @@ import User from "../ui/User";
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
-  const { isFetching } = useAppSelector((state) => state.blogs);
+  const { isFetching, pageSize, page } = useAppSelector((state) => state.blogs);
 
   useEffect(() => {
-    dispatch(getBlogs());
-  }, [dispatch]);
+    dispatch(getBlogs({ page, pageSize }));
+  }, [dispatch, page, pageSize]);
 
   return (
     <div className="p-10">
