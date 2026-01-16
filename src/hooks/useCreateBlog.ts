@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { createBlog } from "../services/apiBlogs";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
+import { useNavigate } from "react-router-dom";
 
 type CreateBlog = {
   title: string;
@@ -8,6 +9,7 @@ type CreateBlog = {
 };
 
 export function useCreateBlog() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
   const isCreating = useAppSelector((state) => state.blogs.isCreating);
@@ -28,6 +30,7 @@ export function useCreateBlog() {
 
     try {
       await dispatch(createBlog(newBlogData)).unwrap();
+      navigate("/dashboard", { replace: true });
       return true;
     } catch (error) {
       console.error(error);

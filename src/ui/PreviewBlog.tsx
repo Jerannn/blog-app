@@ -12,7 +12,7 @@ export default function PreviewBlog() {
   const { userId, isDeleting, dispatch } = useBlogItem();
 
   return (
-    <div className="max-w-8/12 w-full bg-slate-100 p-10 rounded-md relative">
+    <div className=" h-full md:h-auto md:max-w-8/12 w-full bg-white md:bg-slate-100 p-10 md:rounded-md relative">
       <button
         onClick={() => dispatch(closeModal())}
         className="absolute top-7 right-7 cursor-pointer  rounded-full hover:bg-slate-200 duration-200"
@@ -20,7 +20,7 @@ export default function PreviewBlog() {
         <IoIosClose size={30} className="text-slate-800" />
       </button>
 
-      <article>
+      <article className="flex flex-col h-full">
         <h1 className="text-5xl text-slate-700">{selectedBlog?.title}</h1>
 
         <div className="flex items-center gap-2 h-16 border-t border-b border-slate-300  my-5">
@@ -32,7 +32,9 @@ export default function PreviewBlog() {
           </p>
         </div>
 
-        <p className="text-slate-800">{selectedBlog?.content}</p>
+        <p className="text-slate-800 md:h-72 h-full overflow-auto grow">
+          {selectedBlog?.content}
+        </p>
 
         {userId === selectedBlog?.user_id && (
           <div className="flex justify-end items-center gap-3 mt-5">

@@ -19,7 +19,7 @@ function BlogsItem({ data }: BlogsItemProps) {
         <h2 className="text-lg font-semibold text-slate-900">{data.title}</h2>
         <p className="text-md text-slate-800 line-clamp-3">{data.content}</p>
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-start gap-2 flex-col md:flex-row md:items-center">
           <div className="flex flex-col">
             <p className=" text-slate-700 text-sm">
               <span className="font-semibold">By: </span>

@@ -15,7 +15,7 @@ export default function DashboardPage() {
   }, [dispatch, page, pageSize]);
 
   return (
-    <div className="p-10">
+    <div className="p-5 md:p-10">
       <User />
 
       <Title>Recent Blog Posts</Title>

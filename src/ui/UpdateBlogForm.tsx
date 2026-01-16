@@ -7,11 +7,6 @@ import useUpdateBlog from "../hooks/useUpdateBlog";
 import TextInput from "./TextInput";
 import TextArea from "./TextArea";
 
-// todo:
-// navigate to dashboard once the user successfully created a new blog
-// make sure the data is ascending
-// make the first letter of the title a capital
-
 export default function UpdateBlogForm() {
   const {
     title: initialTitle,
@@ -37,7 +32,7 @@ export default function UpdateBlogForm() {
   };
 
   return (
-    <div className="max-w-8/12 w-full bg-slate-100 p-10 rounded-md relative">
+    <div className="h-full overflow-auto md:overflow-hidden   md:h-auto md:max-w-8/12 w-full bg-slate-100  md:bg-white p-10 md:rounded-md relative ">
       <button
         onClick={() => dispatch(closeModal())}
         className="absolute top-7 right-7 cursor-pointer  rounded-full hover:bg-slate-200 duration-200"

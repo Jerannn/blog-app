@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import supabase from "./supabase";
 import type { Blog, CreateBlogInput } from "../features/blogs/types";
+import { capitalizeFirstLetter } from "../utils/helper";
 
 type GetBlogReturnedType = {
   blogs: Blog[];
@@ -27,14 +28,20 @@ export const getBlogs = createAsyncThunk<GetBlogReturnedType, GetBlogArgs>(
     const { data, count, error } = await supabase
       .from("blogs")
       .select("*", { count: "exact" })
+      .order("createdAt", { ascending: false })
       .range(from, to);
 
     if (error) {
       return rejectWithValue("Blogs could not be loaded");
     }
 
+    const formattedData = data?.map((blog) => ({
+      ...blog,
+      title: capitalizeFirstLetter(blog.title),
+    }));
+
     return {
-      blogs: data ?? [],
+      blogs: formattedData ?? [],
       total: count ?? 0,
     };
   }
