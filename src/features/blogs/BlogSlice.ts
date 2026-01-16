@@ -52,6 +52,9 @@ const blogsSlice = createSlice({
     clearSelectedBlog: (state) => {
       state.selectedBlog = null;
     },
+    resetState: (state) => {
+      state.page = 1;
+    },
   },
   extraReducers: (builder) => {
     // fetching blog
@@ -120,7 +123,7 @@ const blogsSlice = createSlice({
   },
 });
 
-export const { nextPage, prevPage, selectBlog, clearSelectedBlog } =
+export const { nextPage, prevPage, selectBlog, clearSelectedBlog, resetState } =
   blogsSlice.actions;
 
 export default blogsSlice.reducer;
