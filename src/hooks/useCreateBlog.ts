@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 type CreateBlog = {
   title: string;
   content: string;
+  file: File | null;
 };
 
 export function useCreateBlog() {
@@ -14,7 +15,7 @@ export function useCreateBlog() {
   const user = useAppSelector((state) => state.auth.user);
   const isCreating = useAppSelector((state) => state.blogs.isCreating);
 
-  const create = async ({ title, content }: CreateBlog) => {
+  const create = async ({ title, content, file }: CreateBlog) => {
     if (!title || !content) {
       toast.error("Please provide title and content.");
       return;
@@ -26,6 +27,7 @@ export function useCreateBlog() {
       authorName: user?.fullName || "",
       authorEmail: user?.email || "",
       user_id: user?.id || "",
+      image: file,
     };
 
     try {

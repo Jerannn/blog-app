@@ -2,6 +2,7 @@ export interface Blog {
   id: string;
   title: string;
   content: string;
+  image: string;
   authorName: string;
   authorEmail: string;
   user_id: string;
@@ -14,4 +15,5 @@ export interface CreateBlogInput {
   authorName: string;
   authorEmail: string;
   user_id: string;
+  image: File | null;
 }

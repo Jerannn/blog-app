@@ -1,11 +1,11 @@
 import { closeModal } from "../features/ui/UiSlice";
 import { useAppDispatch } from "../hooks/reduxHooks";
 import { IoIosWarning } from "react-icons/io";
-import useBlogItem from "../hooks/useDelete";
+import useDelete from "../hooks/useDelete";
 
 export default function Delete() {
   const dispatch = useAppDispatch();
-  const { id, handleDelete } = useBlogItem();
+  const { id, handleDelete, isDeleting } = useDelete();
 
   return (
     <div className="max-w-80 w-full bg-slate-100 rounded-md ">
@@ -31,7 +31,7 @@ export default function Delete() {
           onClick={() => handleDelete(id ?? "")}
           className="px-5 py-1 rounded-md border-2 border-red-500 font-semibold text-white bg-red-500 cursor-pointer"
         >
-          Delete
+          {isDeleting ? "Deleting..." : "Delete"}
         </button>
       </footer>
     </div>

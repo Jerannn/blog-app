@@ -11,6 +11,7 @@ import ProtectedRoute from "./ui/ProtectedRoute.tsx";
 import PublicRoute from "./ui/PublicRoute.tsx";
 import { Toaster } from "react-hot-toast";
 import CenterContent from "./ui/CenterContent.tsx";
+import PostDetailPage from "./pages/PostDetailPage.tsx";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="create-blog" element={<CreateBlogPage />} />
+            <Route path="post/:id" element={<PostDetailPage />} />
           </Route>
 
           <Route

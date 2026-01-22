@@ -5,7 +5,7 @@ type ButtonProps = {
   className?: string;
   type?: "submit" | "button";
   isDisabled?: boolean;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
 export default function Button({

@@ -4,14 +4,16 @@ import { updateBlog } from "../services/apiBlogs";
 
 function useUpdateBlog() {
   const dispatch = useAppDispatch();
-  const { selectedBlog, isUpdating } = useAppSelector((state) => state.blogs);
+  const { blog, isUpdating } = useAppSelector((state) => state.blogs);
 
   const update = async ({
     title,
     content,
+    file,
   }: {
     title: string;
     content: string;
+    file: File | null;
   }) => {
     if (!title || !content) {
       toast.error("Please provide title and content.");
@@ -20,7 +22,7 @@ function useUpdateBlog() {
 
     try {
       await dispatch(
-        updateBlog({ id: selectedBlog?.id, title, content })
+        updateBlog({ id: blog?.id, title, content, image: file }),
       ).unwrap();
       return true;
     } catch (error) {
@@ -30,8 +32,10 @@ function useUpdateBlog() {
   };
 
   return {
-    title: selectedBlog?.title,
-    content: selectedBlog?.content,
+    id: blog?.id || "",
+    title: blog?.title,
+    content: blog?.content,
+    image: blog?.image,
     update,
     dispatch,
     isUpdating,

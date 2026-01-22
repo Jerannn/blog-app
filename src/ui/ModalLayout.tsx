@@ -1,7 +1,6 @@
 import { useAppSelector } from "../hooks/reduxHooks";
 import Delete from "./Delete";
 import Modal from "./Modal";
-import PreviewBlog from "./PreviewBlog";
 import UpdateBlogForm from "./UpdateBlogForm";
 
 export default function ModalLayout() {
@@ -13,7 +12,6 @@ export default function ModalLayout() {
     <Modal>
       {modalType === "editBlog" && <UpdateBlogForm />}
       {modalType === "deleteBlog" && <Delete />}
-      {modalType === "viewBlog" && <PreviewBlog />}
     </Modal>
   );
 }

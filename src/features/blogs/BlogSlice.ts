@@ -1,8 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Blog } from "./types";
 import {
   createBlog,
   deleteBlog,
+  getBlog,
   getBlogs,
   updateBlog,
 } from "../../services/apiBlogs";
@@ -10,6 +11,7 @@ import toast from "react-hot-toast";
 
 interface BlogsState {
   blogs: Blog[];
+  blog: Blog | null;
   total: number;
   page: number;
   pageSize: number;
@@ -19,11 +21,11 @@ interface BlogsState {
   isUpdating: boolean;
   isDeleting: boolean;
   error: string;
-  selectedBlog: Blog | null;
 }
 
 const initialState: BlogsState = {
   blogs: [],
+  blog: null,
   total: 0,
   page: 1,
   pageSize: 3,
@@ -33,7 +35,6 @@ const initialState: BlogsState = {
   isUpdating: false,
   isDeleting: false,
   error: "",
-  selectedBlog: null,
 };
 
 const blogsSlice = createSlice({
@@ -46,15 +47,15 @@ const blogsSlice = createSlice({
     prevPage: (state) => {
       state.page -= 1;
     },
-    selectBlog: (state, action) => {
-      state.selectedBlog = action.payload;
+    selectBlog: (state, action: PayloadAction<Blog | null>) => {
+      state.blog = action.payload;
     },
-    clearSelectedBlog: (state) => {
-      state.selectedBlog = null;
+    resetState: (state) => {
+      state.page = 1;
     },
   },
   extraReducers: (builder) => {
-    // fetching blog
+    // Get blogs
     builder
       .addCase(getBlogs.pending, (state) => {
         state.isFetching = true;
@@ -65,6 +66,19 @@ const blogsSlice = createSlice({
         state.total = action.payload.total;
       })
       .addCase(getBlogs.rejected, (state, action) => {
+        state.isFetching = false;
+        toast.error(action.payload as string);
+      })
+
+      // Get blog
+      .addCase(getBlog.pending, (state) => {
+        state.isFetching = true;
+      })
+      .addCase(getBlog.fulfilled, (state, action) => {
+        state.isFetching = false;
+        state.blog = action.payload;
+      })
+      .addCase(getBlog.rejected, (state, action) => {
         state.isFetching = false;
         toast.error(action.payload as string);
       })
@@ -91,7 +105,7 @@ const blogsSlice = createSlice({
         state.isUpdating = false;
 
         const index = state.blogs.findIndex(
-          (blog) => blog.id === action.payload.id
+          (blog) => blog.id === action.payload.id,
         );
 
         if (index !== -1) {
@@ -120,7 +134,7 @@ const blogsSlice = createSlice({
   },
 });
 
-export const { nextPage, prevPage, selectBlog, clearSelectedBlog } =
+export const { nextPage, prevPage, selectBlog, resetState } =
   blogsSlice.actions;
 
 export default blogsSlice.reducer;
