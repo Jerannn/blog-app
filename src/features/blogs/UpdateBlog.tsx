@@ -1,15 +1,15 @@
 import { useState } from "react";
+import { closeModal } from "../ui/UiSlice";
+import { getBlog } from "../../services/apiBlogs";
 import { IoIosClose } from "react-icons/io";
-import { closeModal } from "../features/ui/UiSlice";
-import Title from "./Title";
-import Button from "./Button";
-import useUpdateBlog from "../hooks/useUpdateBlog";
-import TextInput from "./TextInput";
-import TextArea from "./TextArea";
-import { MdAddPhotoAlternate } from "react-icons/md";
-import { getBlog } from "../services/apiBlogs";
+import useUpdateBlog from "../../hooks/useUpdateBlog";
+import Title from "../../ui/Title";
+import TextInput from "../../ui/TextInput";
+import TextArea from "../../ui/TextArea";
+import Button from "../../ui/Button";
+import ImageUploadFieldset from "../../ui/ImageUploadFieldset";
 
-export default function UpdateBlogForm() {
+export default function UpdateBlog() {
   const {
     id,
     title: initialTitle,
@@ -75,44 +75,11 @@ export default function UpdateBlogForm() {
           onChange={setContent}
         />
 
-        <fieldset className="mb-4">
-          <legend className="text-slate-700 text-sm font-medium mb-2">
-            Upload Photo
-          </legend>
-
-          <div className="flex flex-col items-start gap-2">
-            <label
-              htmlFor="file_input"
-              className="flex flex-col items-center justify-center p-4 cursor-pointer bg-blue-50 rounded-md hover:bg-blue-100 transition-colors"
-            >
-              <span className="flex flex-col items-center gap-1 text-blue-500">
-                <MdAddPhotoAlternate size={50} />
-                <span className="text-lg font-medium">Choose Photo</span>
-              </span>
-              <input
-                id="file_input"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-            </label>
-
-            <p
-              id="file_input_help"
-              className="text-sm text-gray-500 dark:text-gray-300"
-            >
-              SVG, PNG, JPG or GIF
-            </p>
-          </div>
-          {file && (
-            <img
-              src={URL.createObjectURL(file) || image}
-              alt="Preview"
-              className="object-cover rounded-md mt-3"
-            />
-          )}
-        </fieldset>
+        <ImageUploadFieldset
+          file={file}
+          onChange={handleFileChange}
+          previewUrl={image}
+        />
 
         <Button
           type="submit"

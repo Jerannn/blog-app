@@ -1,7 +1,7 @@
+import DeleteBlog from "../features/blogs/DeleteBlog";
+import UpdateBlog from "../features/blogs/UpdateBlog";
 import { useAppSelector } from "../hooks/reduxHooks";
-import Delete from "./Delete";
 import Modal from "./Modal";
-import UpdateBlogForm from "./UpdateBlogForm";
 
 export default function ModalLayout() {
   const { isModalOpen, modalType } = useAppSelector((state) => state.ui);
@@ -10,8 +10,8 @@ export default function ModalLayout() {
 
   return (
     <Modal>
-      {modalType === "editBlog" && <UpdateBlogForm />}
-      {modalType === "deleteBlog" && <Delete />}
+      {modalType === "editBlog" && <UpdateBlog />}
+      {modalType === "deleteBlog" && <DeleteBlog />}
     </Modal>
   );
 }

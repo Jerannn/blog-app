@@ -1,9 +1,9 @@
-import { closeModal } from "../features/ui/UiSlice";
-import { useAppDispatch } from "../hooks/reduxHooks";
 import { IoIosWarning } from "react-icons/io";
-import useDelete from "../hooks/useDelete";
+import { useAppDispatch } from "../../hooks/reduxHooks";
+import { closeModal } from "../ui/UiSlice";
+import useDelete from "../../hooks/useDelete";
 
-export default function Delete() {
+export default function DeleteBlog() {
   const dispatch = useAppDispatch();
   const { id, handleDelete, isDeleting } = useDelete();
 
