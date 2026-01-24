@@ -40,8 +40,6 @@ export const getComments = createAsyncThunk<Comment[], string>(
 export const addComment = createAsyncThunk<Comment, CommentArgs>(
   "comments/add",
   async (newComment, { rejectWithValue }) => {
-    const { removeImage, ...payload } = newComment;
-
     const imageName = `${Math.random()}-${newComment.image?.name}`.replaceAll(
       "/",
       "",
@@ -54,7 +52,15 @@ export const addComment = createAsyncThunk<Comment, CommentArgs>(
     // 1. Add comment
     const { data, error } = await supabase
       .from("comments")
-      .insert([{ ...payload, image: imagePath }])
+      .insert([
+        {
+          post_id: newComment.post_id,
+          parent_id: newComment.parent_id,
+          content: newComment.content,
+          authorName: newComment.authorName,
+          image: imagePath,
+        },
+      ])
       .select()
       .single();
 

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { Comment } from "./types";
 import {
   addComment,
-  deleteComment,
+  // deleteComment,
   getComments,
   updateComment,
 } from "../../services/apiComment";
@@ -86,19 +86,19 @@ const comment = createSlice({
       .addCase(updateComment.rejected, (state, action) => {
         state.updatingCommentId = null;
         toast.error(action.payload as string);
-      })
-
-      // Delete comment
-      .addCase(deleteComment.pending, (state) => {
-        state.isDeleting = true;
-      })
-      .addCase(deleteComment.fulfilled, (state, action) => {
-        state.isDeleting = false;
-      })
-      .addCase(deleteComment.rejected, (state, action) => {
-        state.isDeleting = false;
-        toast.error(action.payload as string);
       });
+
+    // Delete comment
+    // .addCase(deleteComment.pending, (state) => {
+    //   state.isDeleting = true;
+    // })
+    // .addCase(deleteComment.fulfilled, (state, action) => {
+    //   state.isDeleting = false;
+    // })
+    // .addCase(deleteComment.rejected, (state, action) => {
+    //   state.isDeleting = false;
+    //   toast.error(action.payload as string);
+    // });
   },
 });
 
