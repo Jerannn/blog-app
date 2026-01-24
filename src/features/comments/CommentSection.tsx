@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { generateCommentTree } from "../../utils/helper";
 import { getComments } from "../../services/apiComment";
 import CommentItem from "./CommentItem";
-import CommentForm from "./CommentForm";
+import CommentForm from "./AddComment";
 
 type CommentSectionProps = {
   postId?: string;

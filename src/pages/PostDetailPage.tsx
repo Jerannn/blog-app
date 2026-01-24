@@ -9,6 +9,7 @@ import { selectBlog } from "../features/blogs/BlogSlice";
 import Loading from "../ui/Loading";
 import CommentSection from "../features/comments/CommentSection";
 import ThreeDotMenu from "../ui/ThreeDotMenu";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 export default function PostDetailPage() {
   const { id: postId } = useParams();
@@ -33,15 +34,33 @@ export default function PostDetailPage() {
         {user?.id === blog?.user_id && (
           <div className="absolute right-11">
             <ThreeDotMenu
-              onEditModalOpen={() => {
-                dispatch(openModal("editBlog"));
-                dispatch(selectBlog(blog));
-              }}
-              onDeleteModalOpen={() => {
-                dispatch(openModal("deleteBlog"));
-                dispatch(selectBlog(blog));
-              }}
-            />
+              renderContent={() => (
+                <>
+                  <button
+                    className="px-2 py-1 hover:bg-gray-100 cursor-pointer rounded-sm"
+                    onClick={() => {
+                      dispatch(openModal("editBlog"));
+                      dispatch(selectBlog(blog));
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="px-2 py-1 hover:bg-gray-100 cursor-pointer rounded-sm"
+                    onClick={() => {
+                      dispatch(openModal("deleteBlog"));
+                      dispatch(selectBlog(blog));
+                    }}
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
+            >
+              <button className="w-4 h-6 flex justify-center items-center cursor-pointer hover:bg-slate-100 rounded-full transition duration-200 ease-in-out">
+                <BsThreeDotsVertical size={17} />
+              </button>
+            </ThreeDotMenu>
           </div>
         )}
 
@@ -61,11 +80,11 @@ export default function PostDetailPage() {
         <p className="text-slate-800 mb-10">{blog?.content}</p>
 
         {blog?.image && (
-          <div className="w-full overflow-hidden rounded-lg bg-slate-100 aspect-4/3">
+          <div className="w-full overflow-hidden rounded-lg bg-black/3 p-3 ">
             <img
               src={blog?.image}
-              alt=""
-              className="w-full max-h-200 object-contain rounded-lg bg-black/5"
+              alt={blog?.title}
+              className="w-full h-full max-h-[800px] object-contain rounded-lg "
             />
           </div>
         )}

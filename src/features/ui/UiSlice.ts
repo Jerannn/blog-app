@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface UIState {
   isModalOpen: boolean;
-  modalType: "editBlog" | "deleteBlog" | "viewBlog" | null;
+  modalType: string | null;
 }
 
 const initialState: UIState = {

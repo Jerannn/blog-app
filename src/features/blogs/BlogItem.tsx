@@ -24,11 +24,8 @@ function BlogsItem({ data }: BlogsItemProps) {
         <div className="flex items-center gap-2 h-16 border-b border-slate-300 mb-5">
           <FaUserCircle size={35} className="text-red-400" />
           <p className="text-slate-700 flex flex-col">
-            <span>
-              By:{" "}
-              <span className="font-semibold">
-                {user?.id === data.user_id ? "Me" : data.authorName}
-              </span>
+            <span className="font-semibold">
+              {user?.id === data.user_id ? "Me" : data.authorName}
             </span>
             <span>Published on {formatDate(data.createdAt)}</span>
           </p>

@@ -1,7 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import supabase from "./supabase";
 import type { Blog, CreateBlogInput } from "../features/blogs/types";
-import { capitalizeFirstLetter } from "../utils/helper";
+import {
+  capitalizeFirstLetter,
+  deleteImageIfExists,
+  getImageName,
+  getPublicImageUrl,
+} from "../utils/helper";
 
 type GetBlogReturnedType = {
   blogs: Blog[];
@@ -104,7 +109,7 @@ export const deleteBlog = createAsyncThunk<string, string>(
   "blogs/delete",
   async (id, { rejectWithValue }) => {
     // 1. Get the blog to find its image
-    const { data: blog, error } = await supabase
+    const { data: image, error } = await supabase
       .from("blogs")
       .select("image")
       .eq("id", id)
@@ -112,16 +117,31 @@ export const deleteBlog = createAsyncThunk<string, string>(
 
     if (error) return rejectWithValue("Can't find this blog");
 
-    const imagePath = blog?.image?.split("/").at(-1);
-
     // 2. Delete the image from storage if it exists
-    if (imagePath) {
-      const { error: storageError } = await supabase.storage
-        .from("blog-post-images")
-        .remove([imagePath]);
+    await deleteImageIfExists({
+      image: image.image,
+      bucketName: "blog-post-images",
+    });
 
-      if (storageError)
-        return rejectWithValue("Failed to delete blog image from storage");
+    // 3. Get comment images
+    const { data: comments, error: commentsError } = await supabase
+      .from("comments")
+      .select("image")
+      .eq("post_id", id)
+      .not("image", "is", null);
+
+    if (commentsError) throw new Error("Failed to fetch comment images");
+
+    const imagePaths =
+      comments?.map((c) => c.image?.split("/").at(-1)).filter(Boolean) || [];
+
+    // 4. Delete comment images
+    if (imagePaths.length > 0) {
+      const { error: storageError } = await supabase.storage
+        .from("comment-images")
+        .remove(imagePaths);
+
+      if (storageError) throw new Error("Failed to delete comment images");
     }
 
     // 3. Delete the blog from DB
@@ -150,28 +170,29 @@ export const updateBlog = createAsyncThunk<Blog, UpdateBlogArgs>(
 
     let imageFullPath;
 
+    // 2. Delete and replace if exist
     if (image) {
-      const imagePath = blog?.image?.split("/").at(-1);
-      const imageName = `${Math.random()}-${image?.name}`.replaceAll("/", "");
+      await deleteImageIfExists({
+        image: blog?.image,
+        bucketName: "blog-post-images",
+      });
 
-      imageFullPath = image
-        ? `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/blog-post-images/${imageName}`
-        : null;
+      const imageName = getImageName(image);
+      const { error: uploadError } = await supabase.storage
+        .from("blog-post-images")
+        .upload(imageName, image);
 
-      // 2. Delete current image from bucket
-      if (imagePath) {
-        const { error: storageError } = await supabase.storage
-          .from("blog-post-images")
-          .remove([imagePath]);
-
-        if (storageError)
-          return rejectWithValue("Failed to delete blog image from storage");
+      if (uploadError) {
+        return rejectWithValue("Failed to upload image");
       }
 
-      // 3. Upload a new image
-      await supabase.storage.from("blog-post-images").upload(imageName, image);
+      imageFullPath = getPublicImageUrl({
+        imageName,
+        bucketName: "blog-post-images",
+      });
     }
 
+    // 3. Update certain blog
     const { data, error } = await supabase
       .from("blogs")
       .update({ title, content, image: imageFullPath })
